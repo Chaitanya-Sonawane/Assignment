@@ -26,7 +26,17 @@ export default function VideoPlayer({ src }: VideoPlayerProps) {
     setIsLoading(true)
     setError(null)
 
-    if (HLS.isSupported()) {
+    // Check if it's a direct MP4 file
+    const isMp4 = src.endsWith('.mp4') || src.endsWith('.MP4')
+    
+    if (isMp4) {
+      // Handle direct MP4 playback
+      video.src = src
+      setIsLoading(false)
+      video.play().catch((err) => {
+        console.log("[v0] Autoplay prevented:", err)
+      })
+    } else if (HLS.isSupported()) {
       hls = new HLS({
         debug: false,
         enableWorker: true,

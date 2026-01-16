@@ -165,7 +165,19 @@ export default function RTSPStreamManager() {
                 placeholder="rtsp://example.com/stream"
                 className="w-full px-4 py-2.5 bg-slate-950/50 border border-slate-700 rounded-lg text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all"
               />
-              <p className="text-xs text-slate-400 mt-2">Must start with rtsp://</p>
+              <div className="flex items-center justify-between mt-2">
+                <p className="text-xs text-slate-400">Must start with rtsp://</p>
+                <button
+                  type="button"
+                  onClick={() => setFormData({ 
+                    stream_id: formData.stream_id || "demo", 
+                    rtsp_url: "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4" 
+                  })}
+                  className="text-xs text-purple-400 hover:text-purple-300 underline"
+                >
+                  Use Demo RTSP
+                </button>
+              </div>
             </div>
 
             <div className="flex gap-2 pt-2">

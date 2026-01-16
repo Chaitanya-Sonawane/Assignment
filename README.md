@@ -2,11 +2,24 @@
 
 A professional web application for playing live RTSP/HLS streams and managing real-time video overlays with drag-and-drop functionality.
 
-## Features
+## 📹 Demo Video
+
+**[Watch Demo Video](./Demovideo.mp4)**
+
+The demo video demonstrates:
+- Starting the application
+- Playing RTSP livestream
+- Creating, updating, and deleting overlays
+- Real-time overlay behavior and synchronization
+
+---
+
+## 🎯 Features
 
 ### Core Functionality
 - **RTSP Stream Support**: Convert RTSP streams to HLS using FFmpeg
 - **HLS Playback**: Play HLS streams with full video controls
+- **MP4 Support**: Direct playback of MP4 video files
 - **Text Overlays**: Add customizable text overlays on video
 - **Image Overlays**: Add logo/image overlays via URL
 - **Drag-and-Drop**: Move overlays freely on video surface
@@ -15,7 +28,9 @@ A professional web application for playing live RTSP/HLS streams and managing re
 - **Persistent Storage**: MongoDB database for overlay configuration
 - **Multi-Client Support**: Multiple users see same overlays in real-time
 
-## Technology Stack
+---
+
+## 🛠 Technology Stack
 
 ### Backend
 - **Framework**: Flask (Python)
@@ -28,93 +43,133 @@ A professional web application for playing live RTSP/HLS streams and managing re
 - **Framework**: Next.js 16 (React 19)
 - **Styling**: Tailwind CSS v4
 - **WebSocket**: Socket.IO Client
-- **Video Player**: HLS.js
+- **Video Player**: HLS.js with native MP4 support
 
-## Installation & Setup
+---
 
-### Prerequisites
+## 📋 Prerequisites
+
 - Node.js 18+ and npm
 - Python 3.8+
 - MongoDB (local or cloud)
 - FFmpeg (for RTSP conversion)
 
-### Backend Setup
+---
 
-1. **Install FFmpeg**
-   ```bash
-   # Ubuntu/Debian
-   sudo apt-get install ffmpeg
+## 🚀 Installation & Setup
 
-   # macOS
-   brew install ffmpeg
+### 1. Install FFmpeg
 
-   # Windows
-   # Download from https://ffmpeg.org/download.html
-   ```
+**Ubuntu/Debian:**
+```bash
+sudo apt-get update
+sudo apt-get install ffmpeg
+```
 
-2. **Install Python Dependencies**
-   ```bash
-   cd backend
-   pip install -r requirements.txt
-   ```
+**macOS:**
+```bash
+brew install ffmpeg
+```
 
-3. **Configure Environment Variables**
-   ```bash
-   cp .env.example .env
-   ```
-   
-   Edit `.env`:
-   ```
-   MONGODB_URI=mongodb://localhost:27017/
-   DATABASE_NAME=rtsp_overlay_db
-   COLLECTION_NAME=overlays
-   DEBUG=True
-   PORT=5000
-   ```
+**Windows:**
+Download from https://ffmpeg.org/download.html and add to PATH
 
-   **For Cloud MongoDB** (e.g., MongoDB Atlas):
-   ```
-   MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/?retryWrites=true&w=majority
-   ```
+**Verify installation:**
+```bash
+ffmpeg -version
+```
 
-4. **Start Backend Server**
-   ```bash
-   python app.py
-   ```
-   
-   Backend will run on `http://localhost:5000`
+### 2. Backend Setup
 
-### Frontend Setup
+**Install Python Dependencies:**
+```bash
+cd backend
+pip install -r requirements.txt
+```
 
-1. **Install Dependencies**
-   ```bash
-   npm install
-   ```
+**Configure Environment Variables:**
+```bash
+cp .env.example .env
+```
 
-2. **Configure Environment Variables**
-   ```bash
-   cp .env.example .env.local
-   ```
+Edit `backend/.env`:
+```env
+MONGODB_URI=mongodb://localhost:27017/
+DATABASE_NAME=rtsp_overlay_db
+COLLECTION_NAME=overlays
+DEBUG=True
+PORT=5000
+```
 
-3. **Start Development Server**
-   ```bash
-   npm run dev
-   ```
-   
-   Frontend will run on `http://localhost:3000`
+**For Cloud MongoDB (MongoDB Atlas):**
+```env
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/?retryWrites=true&w=majority
+```
 
-## Usage Guide
+**Start Backend Server:**
+```bash
+python app.py
+```
+
+Backend will run on `http://localhost:5000`
+
+### 3. Frontend Setup
+
+**Install Dependencies:**
+```bash
+npm install
+```
+
+**Configure Environment Variables:**
+```bash
+cp .env.example .env.local
+```
+
+Edit `.env.local`:
+```env
+NEXT_PUBLIC_API_URL=http://localhost:5000
+```
+
+**Start Development Server:**
+```bash
+npm run dev
+```
+
+Frontend will run on `http://localhost:3000`
+
+### 4. Quick Start (Both Servers)
+
+Use the provided scripts:
+```bash
+# Start both servers
+./start-all.sh
+
+# Or individually:
+./start-backend.sh  # Backend only
+./start-frontend.sh # Frontend only
+```
+
+---
+
+## 📖 Usage Guide
 
 ### Playing a Stream
 
 #### From Demo Streams
-1. Open the application in browser
-2. Click "Load Demo Stream" in the sidebar
-3. Select a demo stream to play
+1. Open the application at `http://localhost:3000`
+2. Click on any demo stream button in the sidebar
+3. Video will start playing automatically
 
-#### From Custom HLS URL
-1. Paste an HLS URL in the text field
-2. Click "Load Custom URL"
+Available demo streams:
+- Big Buck Bunny (Local MP4)
+- Big Buck Bunny (HLS)
+- Apple Demo Stream
+- Sintel Movie
+- Tears of Steel
+
+#### From Custom HLS URL or MP4
+1. Paste an HLS URL or MP4 URL in the text field
+2. Click "Load Stream"
 3. Stream will load and play
 
 #### From RTSP Source
@@ -145,7 +200,7 @@ A professional web application for playing live RTSP/HLS streams and managing re
 #### Move Overlay
 1. Click on overlay in the video area
 2. Drag to new position
-3. Changes sync in real-time
+3. Changes sync in real-time across all clients
 
 #### Resize Overlay
 1. Click on overlay
@@ -159,47 +214,57 @@ A professional web application for playing live RTSP/HLS streams and managing re
 
 #### Delete Overlay
 1. Click the delete icon next to overlay
-2. Confirm deletion
+2. Overlay is removed immediately
 
-## API Documentation
+---
 
-### Authentication
-Currently no authentication. In production, implement OAuth2 or JWT tokens.
+## 🔌 API Documentation
 
-### REST Endpoints
-
-#### Overlays
-
-**Create Overlay**
+### Base URL
 ```
-POST /api/overlays
-Content-Type: application/json
+http://localhost:5000
+```
 
+### Overlay Endpoints
+
+#### POST /api/overlays
+Create a new overlay
+
+**Request Body:**
+```json
 {
-  "type": "text",
-  "content": "My Text",
-  "position": { "x": 10, "y": 20 },
-  "size": { "width": 200, "height": 50 }
+  "type": "text|image",
+  "content": "string",
+  "position": {
+    "x": 10,
+    "y": 20
+  },
+  "size": {
+    "width": 200,
+    "height": 50
+  }
 }
+```
 
-Response: 201 Created
+**Response (201 Created):**
+```json
 {
   "message": "Overlay created successfully",
   "id": "507f1f77bcf86cd799439011"
 }
 ```
 
-**Get All Overlays**
-```
-GET /api/overlays
+#### GET /api/overlays
+Get all overlays
 
-Response: 200 OK
+**Response (200 OK):**
+```json
 {
   "overlays": [
     {
       "_id": "507f1f77bcf86cd799439011",
       "type": "text",
-      "content": "My Text",
+      "content": "LIVE",
       "position": { "x": 10, "y": 20 },
       "size": { "width": 200, "height": 50 }
     }
@@ -207,59 +272,70 @@ Response: 200 OK
 }
 ```
 
-**Get Single Overlay**
-```
-GET /api/overlays/{overlay_id}
+#### GET /api/overlays/{id}
+Get single overlay by ID
 
-Response: 200 OK
+**Response (200 OK):**
+```json
 {
-  "overlay": { ... }
+  "overlay": {
+    "_id": "507f1f77bcf86cd799439011",
+    "type": "text",
+    "content": "LIVE",
+    "position": { "x": 10, "y": 20 },
+    "size": { "width": 200, "height": 50 }
+  }
 }
 ```
 
-**Update Overlay**
-```
-PUT /api/overlays/{overlay_id}
-Content-Type: application/json
+#### PUT /api/overlays/{id}
+Update overlay (partial update supported)
 
+**Request Body:**
+```json
 {
-  "position": { "x": 30, "y": 40 }
+  "position": { "x": 30, "y": 40 },
+  "content": "Updated Text"
 }
+```
 
-Response: 200 OK
+**Response (200 OK):**
+```json
 {
   "message": "Overlay updated successfully"
 }
 ```
 
-**Delete Overlay**
-```
-DELETE /api/overlays/{overlay_id}
+#### DELETE /api/overlays/{id}
+Delete overlay
 
-Response: 200 OK
+**Response (200 OK):**
+```json
 {
   "message": "Overlay deleted successfully"
 }
 ```
 
-#### RTSP Streams
+### Stream Endpoints
 
-**Start RTSP Stream**
-```
-POST /api/streams
-Content-Type: application/json
+#### POST /api/streams
+Start RTSP to HLS stream
 
+**Request Body:**
+```json
 {
   "stream_id": "camera1",
   "rtsp_url": "rtsp://192.168.1.100:554/stream"
 }
+```
 
-Response: 201 Created
+**Response (201 Created):**
+```json
 {
   "message": "Stream started successfully",
   "stream": {
     "stream_id": "camera1",
-    "rtsp_url": "rtsp://192.168.1.100:554/stream",
+    "rtsp_url": "rtsp://...",
     "hls_url": "/hls/camera1.m3u8",
     "status": "running",
     "pid": 12345
@@ -267,41 +343,55 @@ Response: 201 Created
 }
 ```
 
-**List Active Streams**
-```
-GET /api/streams
+#### GET /api/streams
+List all active streams
 
-Response: 200 OK
+**Response (200 OK):**
+```json
 {
-  "streams": [ ... ]
+  "streams": [
+    {
+      "stream_id": "camera1",
+      "rtsp_url": "rtsp://...",
+      "hls_url": "/hls/camera1.m3u8",
+      "status": "running",
+      "pid": 12345
+    }
+  ]
 }
 ```
 
-**Get Stream Info**
-```
-GET /api/streams/{stream_id}
+#### GET /api/streams/{stream_id}
+Get stream information
 
-Response: 200 OK
+**Response (200 OK):**
+```json
 {
-  "stream": { ... }
+  "stream": {
+    "stream_id": "camera1",
+    "rtsp_url": "rtsp://...",
+    "hls_url": "/hls/camera1.m3u8",
+    "status": "running",
+    "pid": 12345
+  }
 }
 ```
 
-**Stop Stream**
-```
-DELETE /api/streams/{stream_id}
+#### DELETE /api/streams/{stream_id}
+Stop a running stream
 
-Response: 200 OK
+**Response (200 OK):**
+```json
 {
   "message": "Stream stopped successfully"
 }
 ```
 
-**Stop All Streams**
-```
-POST /api/streams/stop-all
+#### POST /api/streams/stop-all
+Stop all running streams
 
-Response: 200 OK
+**Response (200 OK):**
+```json
 {
   "message": "All streams stopped"
 }
@@ -309,46 +399,62 @@ Response: 200 OK
 
 ### WebSocket Events
 
-**Connection**
-```javascript
-socket.on('connect', () => {
-  console.log('Connected to server');
-});
+Connect to `http://localhost:5000` with Socket.IO client
 
-socket.on('connection_response', (data) => {
-  console.log('Connection status:', data);
-});
+#### Server → Client Events
+
+**connection_response**
+```json
+{
+  "status": "connected"
+}
 ```
 
-**Overlay Events**
-```javascript
-// Listen for overlay creation from other clients
-socket.on('overlay_created', (overlay) => {
-  // Add overlay to UI
-});
-
-// Listen for overlay updates
-socket.on('overlay_updated', (data) => {
-  // data: { id: string, overlay: Overlay }
-});
-
-// Listen for deletions
-socket.on('overlay_deleted', (data) => {
-  // data: { id: string }
-});
-
-// Real-time position updates
-socket.on('overlay_moved', (data) => {
-  // data: { id: string, position: { x, y } }
-});
-
-// Real-time size updates
-socket.on('overlay_resized', (data) => {
-  // data: { id: string, size: { width, height } }
-});
+**overlay_created**
+```json
+{
+  "_id": "string",
+  "type": "text|image",
+  "content": "string",
+  "position": { "x": 10, "y": 20 },
+  "size": { "width": 200, "height": 50 }
+}
 ```
 
-## Configuration
+**overlay_updated**
+```json
+{
+  "id": "string",
+  "overlay": { }
+}
+```
+
+**overlay_deleted**
+```json
+{
+  "id": "string"
+}
+```
+
+**overlay_moved**
+```json
+{
+  "id": "string",
+  "position": { "x": 30, "y": 40 }
+}
+```
+
+**overlay_resized**
+```json
+{
+  "id": "string",
+  "size": { "width": 250, "height": 60 }
+}
+```
+
+---
+
+## 🔧 Configuration
 
 ### MongoDB Connection
 - **Local**: `mongodb://localhost:27017/`
@@ -366,75 +472,264 @@ Located in `components/video-player.tsx`:
 - HLS timeout: 10 seconds
 - Max load time: 20 seconds
 - Auto-retry: enabled
+- MP4 direct playback: enabled
 
-## Troubleshooting
+---
+
+## 🐛 Troubleshooting
 
 ### FFmpeg Not Found
 ```
 Error: FFmpeg is not installed
-Solution: Install FFmpeg on your system
+Solution: Install FFmpeg on your system (see installation section)
 ```
 
 ### RTSP Stream Not Starting
 - Verify RTSP URL is correct and accessible
 - Check if camera/source requires authentication
-- Increase FFmpeg timeout in stream_manager.py
+- Test RTSP URL with VLC Media Player first
+- Increase FFmpeg timeout in `stream_manager.py`
 
 ### WebSocket Connection Failed
 - Ensure backend is running on port 5000
-- Check CORS configuration
+- Check CORS configuration in `backend/app.py`
 - Verify firewall allows WebSocket connections
+- Check browser console for detailed errors
 
 ### MongoDB Connection Error
-- Verify MongoDB is running
-- Check connection string in .env
+- Verify MongoDB is running locally
+- Check connection string in `.env`
 - For cloud MongoDB, verify IP whitelist
+- Test connection with MongoDB Compass
 
 ### Overlay Not Appearing
 - Ensure overlay content is not empty
-- Check position is within video bounds
+- Check position is within video bounds (0-800, 0-450)
 - Verify overlay size is > 0
+- Refresh page and check browser console
 
-## Deployment
+### HLS Stream Errors
+- Check backend server is running
+- Verify stream URL is correct
+- Try demo streams first to verify player works
+- Check browser console for network errors
 
-### Production Considerations
-1. **Security**
-   - Implement authentication (JWT/OAuth2)
-   - Add HTTPS/SSL certificates
-   - Enable CORS properly
-   - Validate all inputs
+### Port Already in Use
+```bash
+# Find process using port 5000
+lsof -i :5000
 
-2. **Database**
-   - Use MongoDB Atlas for cloud hosting
-   - Enable encryption at rest
-   - Configure backups
+# Kill the process
+kill -9 <PID>
 
-3. **Backend**
-   - Use production WSGI server (Gunicorn)
-   - Set DEBUG=False
-   - Use environment variables for secrets
+# Or use a different port
+PORT=5001 python backend/app.py
+```
 
-4. **Frontend**
-   - Build for production: `npm run build`
-   - Deploy to Vercel or similar
-   - Configure proper API endpoints
+---
 
-## Support
+## 🚢 Deployment
 
-For issues and questions:
-- Check existing GitHub issues
-- Create detailed bug reports
-- Include error messages and steps to reproduce
+### Deploy Frontend to Vercel
 
-## License
+1. **Push to GitHub:**
+```bash
+git init
+git add .
+git commit -m "Initial commit"
+git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
+git branch -M main
+git push -u origin main
+```
+
+2. **Deploy to Vercel:**
+- Go to https://vercel.com/new
+- Import your GitHub repository
+- Configure:
+  - Framework: Next.js
+  - Build Command: `npm run build`
+  - Output Directory: `.next`
+- Add environment variable:
+  ```
+  NEXT_PUBLIC_API_URL=https://your-backend-url.com
+  ```
+- Click "Deploy"
+
+### Deploy Backend to Railway.app
+
+1. **Sign up at Railway.app**
+2. **Create New Project** from GitHub repo
+3. **Configure:**
+   - Root Directory: `backend`
+   - Start Command: `python app.py`
+4. **Add Environment Variables:**
+   ```
+   MONGODB_URI=your_mongodb_connection_string
+   DATABASE_NAME=rtsp_overlay_db
+   COLLECTION_NAME=overlays
+   DEBUG=False
+   PORT=5000
+   ```
+5. **Generate Domain** and update Vercel's `NEXT_PUBLIC_API_URL`
+
+### MongoDB Atlas Setup
+
+1. Create account at https://www.mongodb.com/cloud/atlas
+2. Create free cluster (M0)
+3. Get connection string
+4. Whitelist IP: `0.0.0.0/0`
+5. Add to backend environment variables
+
+---
+
+## 📁 Project Structure
+
+```
+rtsp-overlay-app/
+├── app/                    # Next.js app directory
+│   ├── globals.css        # Global styles
+│   ├── layout.tsx         # Root layout
+│   └── page.tsx           # Main page
+├── backend/               # Flask backend
+│   ├── app.py            # Main Flask app
+│   ├── routes.py         # Overlay API routes
+│   ├── stream_routes.py  # Stream API routes
+│   ├── models.py         # Database models
+│   ├── config.py         # Configuration
+│   ├── stream_manager.py # FFmpeg stream manager
+│   ├── socketio_manager.py # WebSocket manager
+│   └── requirements.txt  # Python dependencies
+├── components/           # React components
+│   ├── video-player.tsx
+│   ├── overlay-canvas.tsx
+│   ├── overlay-manager.tsx
+│   ├── stream-list.tsx
+│   └── rtsp-stream-manager.tsx
+├── hooks/               # Custom React hooks
+│   └── use-websocket-overlay.ts
+├── lib/                 # Utility functions
+├── public/             # Static assets
+├── BigBuckBunny.mp4   # Demo video file
+├── Demovideo.mp4      # Application demo video
+├── package.json       # Node dependencies
+├── tsconfig.json      # TypeScript config
+├── tailwind.config.ts # Tailwind config
+├── next.config.mjs    # Next.js config
+└── README.md          # This file
+```
+
+---
+
+## 🎓 Assignment Requirements Checklist
+
+### ✅ Core Features
+- [x] RTSP stream playback
+- [x] Overlay management (CRUD operations)
+- [x] Real-time overlay synchronization
+- [x] Drag-and-drop overlay positioning
+- [x] Overlay resizing
+
+### ✅ Technology Stack
+- [x] Backend: Python (Flask)
+- [x] Database: MongoDB
+- [x] Frontend: React (Next.js)
+- [x] Video Streaming: RTSP-compatible (FFmpeg + HLS.js)
+
+### ✅ CRUD Operations
+- [x] Create overlay
+- [x] Read overlays (all and by ID)
+- [x] Update overlay
+- [x] Delete overlay
+
+### ✅ Deliverables
+- [x] Code Repository (Backend + Frontend)
+- [x] Clear project structure
+- [x] README with setup instructions
+- [x] Instructions to run locally
+- [x] RTSP URL configuration guide
+- [x] API documentation with examples
+- [x] User guide for overlay management
+- [x] Demo video showing all features
+
+---
+
+## 🎬 Demo Video Content
+
+The included `Demovideo.mp4` demonstrates:
+
+1. **Starting the Application**
+   - Backend server startup
+   - Frontend server startup
+   - Application loading
+
+2. **Playing RTSP Livestream**
+   - Loading demo stream
+   - Video playback controls
+   - Stream status indicators
+
+3. **Creating Overlays**
+   - Adding text overlay
+   - Adding image overlay
+   - Setting position and size
+
+4. **Updating Overlays**
+   - Editing overlay properties
+   - Modifying content
+   - Changing position/size
+
+5. **Deleting Overlays**
+   - Removing overlays
+   - Confirmation of deletion
+
+6. **Real-time Behavior**
+   - Drag-and-drop positioning
+   - Overlay resizing
+   - Multi-client synchronization
+   - WebSocket connection status
+
+---
+
+## 📝 License
 
 MIT License - see LICENSE file for details
 
-## Contributing
+---
+
+## 🤝 Contributing
 
 Contributions welcome! Please:
 1. Fork the repository
-2. Create feature branch
-3. Commit changes
-4. Push to branch
+2. Create feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit changes (`git commit -m 'Add AmazingFeature'`)
+4. Push to branch (`git push origin feature/AmazingFeature`)
 5. Open pull request
+
+---
+
+## 📧 Support
+
+For issues and questions:
+- Check the Troubleshooting section above
+- Review browser console for errors (F12)
+- Check backend logs for detailed error messages
+- Verify all prerequisites are installed
+- Test with demo streams first
+
+---
+
+## 🎯 Key Features Summary
+
+- ✅ RTSP to HLS conversion with FFmpeg
+- ✅ Real-time WebSocket synchronization
+- ✅ Drag-and-drop overlay management
+- ✅ MongoDB persistent storage
+- ✅ Multi-client support
+- ✅ Responsive UI with Tailwind CSS
+- ✅ Complete REST API
+- ✅ MP4 and HLS stream support
+- ✅ Production-ready architecture
+- ✅ Comprehensive documentation
+
+---
+
+**Built with ❤️ for RTSP livestream overlay management**

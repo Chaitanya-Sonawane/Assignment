@@ -37,10 +37,16 @@ __pycache__/
 .Python
 backend/__pycache__/
 backend/*.pyc
+backend/venv/
+venv/
+env/
 
 # HLS files
 /hls/
 backend/hls/
+
+# Large video files (keep only demo video)
+BigBuckBunny.mp4
 
 # IDE
 .vscode/

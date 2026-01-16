@@ -41,6 +41,18 @@ def create_app():
         response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
         return response
     
+    # Serve demo video file
+    @app.route('/demo/BigBuckBunny.mp4')
+    def serve_demo_video():
+        """Serve the demo video file"""
+        from flask import send_from_directory
+        video_dir = os.path.dirname(os.getcwd())
+        response = send_from_directory(video_dir, 'BigBuckBunny.mp4')
+        # Add CORS headers
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Accept-Ranges'] = 'bytes'
+        return response
+    
     # Health check endpoint
     @app.route('/health')
     def health_check():

@@ -10,7 +10,13 @@ import OverlayCanvas from "@/components/overlay-canvas"
 import RTSPStreamManager from "@/components/rtsp-stream-manager"
 import { useWebSocketOverlay } from "@/hooks/use-websocket-overlay"
 
-const DEMO_STREAMS = {}
+const DEMO_STREAMS = {
+  "Big Buck Bunny (Local)": "http://localhost:5000/demo/BigBuckBunny.mp4",
+  "Big Buck Bunny": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+  "Apple Demo Stream": "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8",
+  "Sintel Movie": "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8",
+  "Tears of Steel": "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8",
+}
 
 interface Overlay {
   _id: string
