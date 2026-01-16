@@ -4,13 +4,18 @@ A professional web application for playing live RTSP/HLS streams and managing re
 
 ## 📹 Demo Video
 
-**[Watch Demo Video](./Demovideo.mp4)**
+**[Watch Demo Video on Google Drive](https://drive.google.com/file/d/1bYACGxJ-7GdQonwnPFrk7_uQ1W2xH5xH/view?usp=drive_link)**
 
 The demo video demonstrates:
-- Starting the application
-- Playing RTSP livestream
-- Creating, updating, and deleting overlays
-- Real-time overlay behavior and synchronization
+- **Core Features and Workflow**: Complete application functionality walkthrough
+- **Real-time Functionality**: Live overlay synchronization and WebSocket communication
+- **UI/UX Walkthrough**: User interface navigation and interaction patterns
+- **Use-case Demonstration**: Practical scenarios including:
+  - Starting the application
+  - Playing RTSP livestream
+  - Creating, updating, and deleting overlays
+  - Drag-and-drop overlay positioning
+  - Real-time overlay behavior and multi-client synchronization
 
 ---
 

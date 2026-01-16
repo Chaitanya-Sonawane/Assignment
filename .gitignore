@@ -45,8 +45,9 @@ env/
 /hls/
 backend/hls/
 
-# Large video files (keep only demo video)
+# Large video files
 BigBuckBunny.mp4
+Demovideo.mp4
 
 # IDE
 .vscode/
